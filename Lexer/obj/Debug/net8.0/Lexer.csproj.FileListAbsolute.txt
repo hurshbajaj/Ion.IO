@@ -12,3 +12,4 @@ C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Lexer\obj\Debug\net8.0\refint\Lexer.dl
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Lexer\obj\Debug\net8.0\Lexer.pdb
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Lexer\obj\Debug\net8.0\Lexer.genruntimeconfig.cache
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Lexer\obj\Debug\net8.0\ref\Lexer.dll
+C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Lexer\obj\Debug\net8.0\Lexer.sourcelink.json

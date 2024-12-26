@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Lexer
 {
     public class Lexer 
     {
-        private struct token 
+        public struct token 
         {
             string value { get; set; }
             TokenTypes type { get; set; }
@@ -26,11 +27,24 @@ namespace Lexer
             closeParen,
             flag
         }
-        
-        public static List<string>? SrcString = null;
-        public string? refe => string.Join(", ", SrcString);
 
-        private static List<token> LexedStr = new List<token>(); 
+        public string[] FlagTypes = [
+            "(string)",
+            "(bool)",
+            "integer",
+            "(double)",
+            "(function)",
+            "(construct)",
+            "(type)",
+            
+            "(static)",
+            "(const)"
+        ];
+        public static List<string>? SrcString = null;
+
+        public static List<token> LexedArr = new List<token>();
+        public List<token> LexedArrRef => LexedArr;
+        
 
         public Lexer(string src)
         {
@@ -47,19 +61,32 @@ namespace Lexer
         public void Lex()
         {
             
-            foreach (string i in SrcString)
+            while (SrcString.Count > 0)
             {
-                Console.WriteLine(i);
-                switch (i)
+                switch (SrcString[0])
                 {
                     case "(":
                         if (!isAlpha())
                         {
-                            LexedStr.Add(tokenize("(", TokenTypes.openParen));
+                            LexedArr.Add(tokenize(shift(), TokenTypes.openParen));
                         }
                         else
                         {
-                            
+                            string flag = shift();
+                            while (shift() != ")")
+                            {
+                                flag += SrcString[0];
+                            }
+                            flag += shift();
+                            if (FlagTypes.Contains(flag))
+                            {
+                                LexedArr.Add(tokenize(flag, TokenTypes.flag));
+                            }
+                            else
+                            {
+                                Console.Error.WriteLine("Invalid flag: " + flag);
+                            }
+
                         }
                         break;
                 }

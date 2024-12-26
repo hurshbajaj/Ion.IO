@@ -24,3 +24,4 @@ C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Compiler\obj\Debug\net8.0\refint\Compi
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Compiler\obj\Debug\net8.0\Compiler.pdb
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Compiler\obj\Debug\net8.0\Compiler.genruntimeconfig.cache
 C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Compiler\obj\Debug\net8.0\ref\Compiler.dll
+C:\Users\Hursh Bajaj\RiderProjects\Ion.io\Compiler\obj\Debug\net8.0\Compiler.sourcelink.json

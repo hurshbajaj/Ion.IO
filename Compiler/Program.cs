@@ -9,15 +9,22 @@ namespace Compiler
     {
         static void Main()
         {
-            Lexer.Lexer lexer = new Lexer.Lexer(GetSrc());
-            lexer.Lex();
-            //Console.WriteLine("Src: " + string.Join(" " ,lexer.refe));
+            Console.WriteLine(GetSrc());
+            
+            // Lexer.Lexer lexer = new Lexer.Lexer(GetSrc());
+            // lexer.Lex();
+            
+            // for (int i = 0; i <= lexer.LexedArrRef.Count; i++)
+            // {
+            //     Console.WriteLine(lexer.LexedArrRef[i]);
+            // }
+            
         }
         
         private static string GetSrc()
         {
             Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "Test.io"));
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Test.io");
+            string filePath = "C:\\Users\\Hursh Bajaj\\RiderProjects\\Ion.io\\Compiler\\Test.io";
             return File.Exists(filePath) ? File.ReadAllText(filePath): "err";
         }
     }
