@@ -2,28 +2,35 @@
 
 namespace Lexer
 {
-    public class Lexer
+    public class Lexer 
     {
-        private struct token
+        private struct token 
         {
             string value { get; set; }
             TokenTypes type { get; set; }
-            
+
+            public token(string value, TokenTypes type)
+            {
+                this.value = value;
+                this.type = type;
+            }
         }
 
-        private enum TokenTypes
+        public enum TokenTypes
         {
             keyword,
             identifier,
             number,
             binOp,
+            openParen,
+            closeParen,
             flag
         }
         
         public static List<string>? SrcString = null;
         public string? refe => string.Join(", ", SrcString);
 
-        private static List<string> LexedStr = new List<string>(); 
+        private static List<token> LexedStr = new List<token>(); 
 
         public Lexer(string src)
         {
@@ -46,12 +53,34 @@ namespace Lexer
                 switch (i)
                 {
                     case "(":
+                        if (!isAlpha())
+                        {
+                            LexedStr.Add(tokenize("(", TokenTypes.openParen));
+                        }
+                        else
+                        {
+                            
+                        }
                         break;
                 }
             }
         }
 
-        //private string? shift()
-        
+        private string? shift()
+        {
+            string element = SrcString[0];
+            SrcString.RemoveAt(0);
+            return element;
+        }
+
+        private bool isAlpha() 
+        {
+            return SrcString[0].ToLower() == SrcString[0].ToUpper();
+        }
+
+        private token tokenize(string val, TokenTypes type)
+        {
+            return new token(val, type); 
+        }
     }
 }
