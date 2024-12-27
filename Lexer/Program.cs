@@ -5,6 +5,8 @@ namespace Lexer
 {
     public class Lexer 
     {
+        private List<char> escChars = new List<char>() { '\n', '\t', '\r' };
+        
         public struct token 
         {
             public string value { get; set; }
@@ -32,7 +34,7 @@ namespace Lexer
         public string[] FlagTypes = new String[]{
             "(string)",
             "(bool)",
-            "integer",
+            "(integer)",
             "(double)",
             "(function)",
             "(construct)",
@@ -70,28 +72,32 @@ namespace Lexer
                 switch (SrcString[0])
                 {
                     case "(":
-                        if (!isAlpha(1))
+                        if (SrcString[1] != null)
                         {
-                            LexedArr.Add(tokenize(shift(), TokenTypes.openParen));
-                        }
-                        else
-                        {
-                            string flag = shift();
-                            while (shift() != ")")
+                            if (!isAlpha(1))
                             {
-                                flag += SrcString[0];
-                            }
-                            flag += shift();
-                            if (FlagTypes.Contains(flag))
-                            {
-                                LexedArr.Add(tokenize(flag, TokenTypes.flag));
+                                LexedArr.Add(tokenize(shift(), TokenTypes.openParen));
                             }
                             else
                             {
-                                Console.Error.WriteLine("Invalid flag: " + flag);
-                            }
+                                string flag = shift();
+                                while (SrcString[0] != ")")
+                                {
+                                    flag += shift();
+                                }
+                                flag += shift();
+                                if (FlagTypes.Contains(flag))
+                                {
+                                    LexedArr.Add(tokenize(flag, TokenTypes.flag));
+                                }
+                                else
+                                {
+                                    Console.Error.WriteLine("Invalid flag: " + flag);
+                                }
 
+                            }
                         }
+                        
                         break;
                     case ")":
                         LexedArr.Add(tokenize(shift(), TokenTypes.closeParen));
@@ -139,7 +145,7 @@ namespace Lexer
                         //isSkippable
                         else if (isSkippable(0))
                         {
-                            break;
+                            shift();
                         }
                         //Is err
                         else
@@ -151,7 +157,6 @@ namespace Lexer
                         break;
                 }
             }
-            Console.WriteLine(LexedArr[0]);
         }
         
         private string? shift()
@@ -163,7 +168,11 @@ namespace Lexer
 
         private bool isAlpha(int i) 
         {
-            return SrcString[i].ToLower() != SrcString[i].ToUpper();
+            if (SrcString[i] == null)
+            {
+                return false;
+            }
+            return  SrcString[i].ToLower() != SrcString[i].ToUpper();
         }
 
         public token tokenize(string val, TokenTypes type)
@@ -186,7 +195,7 @@ namespace Lexer
 
         private bool isSkippable(int i) //oops
         {
-            return SrcString[i].StartsWith('\\') || SrcString[i].StartsWith(" "); 
+            return escChars.Contains(SrcString[i].ToCharArray()[0]) || SrcString[i].StartsWith(" ") || SrcString[i] == null; 
         }
 
     } 
