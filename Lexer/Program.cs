@@ -105,6 +105,12 @@ namespace Lexer
                     case ";":
                         LexedArr.Add(tokenize(shift(), TokenTypes.lineEnd));
                         break;
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                        LexedArr.Add(tokenize(shift(), TokenTypes.binOp));
+                        break;
                     default:
                         //Is Identifier
                         if (SrcString[0].StartsWith("$"))
