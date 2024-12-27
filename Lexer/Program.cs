@@ -67,7 +67,6 @@ namespace Lexer
             
             while (SrcString.Count > 0)
             {
-                Console.WriteLine(SrcString[0]);
                 switch (SrcString[0])
                 {
                     case "(":
@@ -101,8 +100,18 @@ namespace Lexer
                         LexedArr.Add(tokenize(shift(), TokenTypes.lineEnd));
                         break;
                     default:
+                        //Is Identifier
+                        if (SrcString[0].StartsWith("$"))
+                        {
+                            string keyword = shift();
+                            while (isAlpha(0))
+                            {
+                                keyword += SrcString[0];
+                            }
+                            LexedArr.Add(tokenize(keyword, TokenTypes.keyword));
+                        }
                         
-                        //isKeyword   //Is Identifier
+                        //isKeyword   
                         if (isAlpha(0))
                         {
                             //2 possibilities now
@@ -112,15 +121,9 @@ namespace Lexer
                                 group += shift(); 
                             }
 
-                            if (Keywords.Contains(group))
-                            {
-                                LexedArr.Add(tokenize(group, TokenTypes.keyword)); 
-                            }
-                            else
-                            {
-                                Console.WriteLine("I GOT IT");
-                                LexedArr.Add(tokenize(group, TokenTypes.identifier));
-                            }
+                            
+                            LexedArr.Add(tokenize(group, TokenTypes.identifier));
+                            
                         }
                         //Is Number
                         else if (isDigit(0))
@@ -132,7 +135,6 @@ namespace Lexer
                             }
                             
                             LexedArr.Add(tokenize(number, TokenTypes.number));
-                            Console.WriteLine(LexedArr[0].type);
                         }
                         //isSkippable
                         else if (isSkippable(0))
@@ -149,6 +151,7 @@ namespace Lexer
                         break;
                 }
             }
+            Console.WriteLine(LexedArr[0]);
         }
         
         private string? shift()
@@ -183,7 +186,7 @@ namespace Lexer
 
         private bool isSkippable(int i) //oops
         {
-            return SrcString[i].StartsWith('\\') || SrcString[i] == " "; 
+            return SrcString[i].StartsWith('\\') || SrcString[i].StartsWith(" "); 
         }
 
     } 
