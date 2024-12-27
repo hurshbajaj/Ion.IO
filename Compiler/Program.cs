@@ -12,10 +12,10 @@ namespace Compiler
             Lexer.Lexer lexer = new Lexer.Lexer(GetSrc());
             lexer.Lex();
             
-            for (int i = 0; i < lexer.LexedArrRef.Count; i++) //hmm, i think this is what might hve been causing the loop
-            {
-                 Console.WriteLine(lexer.LexedArrRef[i]);
-            } //infinite loop?
+            // for (int i = 0; i < lexer.LexedArrRef.Count; i++) //hmm, i think this is what might hve been causing the loop
+            // {
+            //      Console.WriteLine(lexer.LexedArrRef[i]);
+            // }
             
         } 
         

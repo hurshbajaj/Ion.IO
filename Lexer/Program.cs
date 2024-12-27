@@ -7,8 +7,8 @@ namespace Lexer
     {
         public struct token 
         {
-            string value { get; set; }
-            TokenTypes type { get; set; }
+            public string value { get; set; }
+            public TokenTypes type { get; set; }
 
             public token(string value, TokenTypes type)
             {
@@ -106,7 +106,7 @@ namespace Lexer
                         if (isAlpha(0))
                         {
                             //2 possibilities now
-                            string group = shift();
+                            string group = "";
                             while (isAlpha(0))
                             {
                                 group += shift(); 
@@ -130,7 +130,9 @@ namespace Lexer
                             {
                                 number += shift();
                             }
+                            
                             LexedArr.Add(tokenize(number, TokenTypes.number));
+                            Console.WriteLine(LexedArr[0].type);
                         }
                         //isSkippable
                         else if (isSkippable(0))
@@ -161,7 +163,7 @@ namespace Lexer
             return SrcString[i].ToLower() != SrcString[i].ToUpper();
         }
 
-        private token tokenize(string val, TokenTypes type)
+        public token tokenize(string val, TokenTypes type)
         {
             return new token(val, type); 
         }
