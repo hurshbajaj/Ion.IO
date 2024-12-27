@@ -25,10 +25,11 @@ namespace Lexer
             binOp,
             openParen,
             closeParen,
-            flag
+            flag,
+            lineEnd
         }
 
-        public string[] FlagTypes = [
+        public string[] FlagTypes = new String[]{
             "(string)",
             "(bool)",
             "integer",
@@ -39,7 +40,11 @@ namespace Lexer
             
             "(static)",
             "(const)"
-        ];
+        };
+
+        public string[] Keywords = new String[]{
+            "$", //just one for now (:
+        };
         public static List<string>? SrcString = null;
 
         public static List<token> LexedArr = new List<token>();
@@ -48,7 +53,6 @@ namespace Lexer
 
         public Lexer(string src)
         {
-            Console.WriteLine("construct");
             SrcString = src.ToCharArray().Select(c => c.ToString()).ToList();
         }
 
@@ -63,10 +67,11 @@ namespace Lexer
             
             while (SrcString.Count > 0)
             {
+                Console.WriteLine(SrcString[0]);
                 switch (SrcString[0])
                 {
                     case "(":
-                        if (!isAlpha())
+                        if (!isAlpha(1))
                         {
                             LexedArr.Add(tokenize(shift(), TokenTypes.openParen));
                         }
@@ -89,10 +94,61 @@ namespace Lexer
 
                         }
                         break;
+                    case ")":
+                        LexedArr.Add(tokenize(shift(), TokenTypes.closeParen));
+                        break;
+                    case ";":
+                        LexedArr.Add(tokenize(shift(), TokenTypes.lineEnd));
+                        break;
+                    default:
+                        
+                        //isKeyword   //Is Identifier
+                        if (isAlpha(0))
+                        {
+                            //2 possibilities now
+                            string group = shift();
+                            while (isAlpha(0))
+                            {
+                                group += shift(); 
+                            }
+
+                            if (Keywords.Contains(group))
+                            {
+                                LexedArr.Add(tokenize(group, TokenTypes.keyword)); 
+                            }
+                            else
+                            {
+                                Console.WriteLine("I GOT IT");
+                                LexedArr.Add(tokenize(group, TokenTypes.identifier));
+                            }
+                        }
+                        //Is Number
+                        else if (isDigit(0))
+                        {
+                            string number = "";
+                            while (isDigit(0))
+                            {
+                                number += shift();
+                            }
+                            LexedArr.Add(tokenize(number, TokenTypes.number));
+                        }
+                        //isSkippable
+                        else if (isSkippable(0))
+                        {
+                            break;
+                        }
+                        //Is err
+                        else
+                        {
+                            Console.Error.WriteLine("Invalid token: " + SrcString[0]);
+                            shift();
+                            
+                        }
+                        break;
                 }
             }
         }
-
+        
         private string? shift()
         {
             string element = SrcString[0];
@@ -100,14 +156,33 @@ namespace Lexer
             return element;
         }
 
-        private bool isAlpha() 
+        private bool isAlpha(int i) 
         {
-            return SrcString[0].ToLower() == SrcString[0].ToUpper();
+            return SrcString[i].ToLower() != SrcString[i].ToUpper();
         }
 
         private token tokenize(string val, TokenTypes type)
         {
             return new token(val, type); 
         }
-    }
+
+        private bool isDigit(int i)
+        {
+            try
+            {
+                int holder = int.Parse(SrcString[i]);
+                return true;
+            }
+            catch (FormatException ex)
+            {
+                return false;
+            }
+        } //hmm, we also have a syntax error, i wonder why c# didnt tell us
+
+        private bool isSkippable(int i) //oops
+        {
+            return SrcString[i].StartsWith('\\') || SrcString[i] == " "; 
+        }
+
+    } 
 }

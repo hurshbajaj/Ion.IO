@@ -9,17 +9,15 @@ namespace Compiler
     {
         static void Main()
         {
-            Console.WriteLine(GetSrc());
+            Lexer.Lexer lexer = new Lexer.Lexer(GetSrc());
+            lexer.Lex();
             
-            // Lexer.Lexer lexer = new Lexer.Lexer(GetSrc());
-            // lexer.Lex();
+            for (int i = 0; i < lexer.LexedArrRef.Count; i++) //hmm, i think this is what might hve been causing the loop
+            {
+                 Console.WriteLine(lexer.LexedArrRef[i]);
+            } //infinite loop?
             
-            // for (int i = 0; i <= lexer.LexedArrRef.Count; i++)
-            // {
-            //     Console.WriteLine(lexer.LexedArrRef[i]);
-            // }
-            
-        }
+        } 
         
         private static string GetSrc()
         {
